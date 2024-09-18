@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="build" name="weeklyGOPHER-eXist-module">
+	<description>$Id$
+weeklyGOPHER-eXist-module glue classes by jmfernandez Ant script</description>
+
+	<dirname property="weeklyGOPHER-eXist-module.dir" file="${ant.file.weeklyGOPHER-eXist-module}"/>
+	<dirname property="weeklyGOPHER-eXist-module.dir.parent" file="${weeklyGOPHER-eXist-module.dir}"/>
+	
+	<property name="weeklyGOPHER-eXist-module.main.jar" value="weeklyGOPHER-eXist-module" />
+	<include file="${weeklyGOPHER-eXist-module.dir.parent}/ant-includes/xdb-bootstrap.xml"/>
+	<include file="${weeklyGOPHER-eXist-module.dir.parent}/GOPHERPrepare/build.xml"/>
+	
+	<!-- Target compiling version is determined by source one -->
+	<!-- See http://docs.oracle.com/javase/8/docs/technotes/agents/windows/javac.html -->
+	<property name="build.compiler.source" value="1.8"/>
+	
+	<property name="weeklyGOPHER-eXist-module.src" location="${weeklyGOPHER-eXist-module.dir}/src" />
+	<property name="weeklyGOPHER-eXist-module.build" location="${weeklyGOPHER-eXist-module.dir}/build" />
+	<property name="weeklyGOPHER-eXist-module.libs" location="${weeklyGOPHER-eXist-module.dir}/libs" />
+	<property name="weeklyGOPHER-eXist-module.dist" location="${weeklyGOPHER-eXist-module.dir}/dist" />
+
+	<target name="init" depends="xdb-bootstrap.init,GOPHERPrepare.init">
+		<!-- Creating the timestamp -->
+		<tstamp/>
+	</target>
+
+	<target name="compile" depends="init,GOPHERPrepare.build" description="compiles the source">
+		<mkdir dir="${weeklyGOPHER-eXist-module.build}"/>
+		
+		<local name="compile.path.id.name"/>
+		<local name="gopherprepare.compile.path.id.name"/>
+		<property name="compile.path.id.name" value="eXist.classpath"/>
+		<property name="gopherprepare.compile.path.id.name" value="gopherprepare.classpath"/>
+		<eXist.dependencies.path eXist.path.id.name="${compile.path.id.name}"/>
+		<GOPHERPrepare.dependencies.path GOPHERPrepare.path.id.name="${gopherprepare.compile.path.id.name}"/>
+		
+		<javac
+			debug="on"
+			includeantruntime="false"
+			includes="**"
+			source="${build.compiler.source}"
+			srcdir="${weeklyGOPHER-eXist-module.src}"
+			destdir="${weeklyGOPHER-eXist-module.build}"
+		>
+			<classpath refid="${gopherprepare.compile.path.id.name}" />
+			<classpath refid="${compile.path.id.name}" />
+		</javac>
+	</target>
+	
+	<target name="build" depends="compile" description="generates the internal distribution">
+		<mkdir dir="${weeklyGOPHER-eXist-module.dist}"/>
+		<!--
+		<jar basedir="${weeklyGOPHER-eXist-module.build}" jarfile="${weeklyGOPHER-eXist-module.dist}/PDBSeq.jar">
+			<include name="**/PDBSeq.class"/>
+		</jar>
+		-->
+		<jar basedir="${weeklyGOPHER-eXist-module.build}" jarfile="${weeklyGOPHER-eXist-module.dist}/${weeklyGOPHER-eXist-module.main.jar}.jar">
+			<exclude name="**/PDBSeq.class"/>
+		</jar>
+		<copy file="${PDBSeq.jar}" todir="${weeklyGOPHER-eXist-module.dist}"/>
+	</target>
+	
+	<target name="clean" description="clean up ${weeklyGOPHER-eXist-module.main.jar}">
+		<delete dir="${weeklyGOPHER-eXist-module.build}"/>
+		<delete dir="${weeklyGOPHER-eXist-module.dist}"/>
+	</target>
+	
+	<target name="realclean" depends="GOPHERPrepare.clean,clean" description="clean up ${weeklyGOPHER-eXist-module.main.jar} and its dependencies" />
+</project>

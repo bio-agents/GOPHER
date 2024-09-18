@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="build" name="GOPHERPrepare">
+	<description>$Id$
+GOPHERPrepare classes by jmfernandez Ant script</description>
+
+	<dirname property="GOPHERPrepare.dir" file="${ant.file.GOPHERPrepare}"/>
+	
+	<!-- Target compiling version is determined by source one -->
+	<!-- See http://docs.oracle.com/javase/8/docs/technotes/agents/windows/javac.html -->
+	<property name="build.compiler.source" value="1.8"/>
+	
+	<property name="GOPHERPrepare.src" location="${GOPHERPrepare.dir}/src" />
+	<property name="GOPHERPrepare.build" location="${GOPHERPrepare.dir}/build" />
+	<property name="GOPHERPrepare.libs" location="${GOPHERPrepare.dir}/libs" />
+	<property name="GOPHERPrepare.dist" location="${GOPHERPrepare.dir}/dist" />
+	
+	<property name="GOPHERPrepare.main.class" value="GOPHERPrepare" />
+	<property name="PDBSeq.main.class" value="PDBSeq" />
+	
+	<property name="PDBSeq.jar.rel" value="${PDBSeq.main.class}.jar"/>
+	<property name="PDBSeq.jar" location="${GOPHERPrepare.dist}/${PDBSeq.jar.rel}"/>
+	
+	<property name="GOPHERPrepare.jar" location="${GOPHERPrepare.dist}/${GOPHERPrepare.main.class}.jar"/>
+	
+	<condition property="PDBSeq.archive.present">
+		<and>
+			<available file="${PDBSeq.jar}"/>
+			<available file="${GOPHERPrepare.jar}"/>
+		</and>
+	</condition>
+	
+	<target name="init">
+		<!-- Creating the timestamp -->
+		<tstamp/>
+	</target>
+
+	<target name="compile" depends="init" description="compiles the source">
+		<mkdir dir="${GOPHERPrepare.build}"/>
+		<javac
+			debug="on"
+			includeantruntime="false"
+			includes="**"
+			source="${build.compiler.source}"
+			srcdir="${GOPHERPrepare.src}"
+			destdir="${GOPHERPrepare.build}"
+		/>
+	</target>
+	
+	<target name="build" depends="compile" description="generates the internal distribution">
+		<jar basedir="${GOPHERPrepare.build}" jarfile="${PDBSeq.jar}">
+			<include name="**/${PDBSeq.main.class}.class"/>
+		</jar>
+		<jar basedir="${GOPHERPrepare.build}" jarfile="${GOPHERPrepare.jar}">
+			<exclude name="**/${PDBSeq.main.class}.class"/>
+			
+			<manifest>
+				<attribute name="Main-Class" value="org.cnio.scombio.jmfernandez.GOPHER.${GOPHERPrepare.main.class}"/>
+				<attribute name="Class-Path" value="${PDBSeq.jar.rel}"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="conditional.build" unless="PDBSeq.archive.present">
+		<antcall target="GOPHERPrepare.build"/>
+	</target>
+	
+	<target name="clean" description="clean up ${GOPHERPrepare.main.class}">
+		<delete dir="${GOPHERPrepare.build}"/>
+		<delete dir="${GOPHERPrepare.dist}"/>
+	</target>
+	
+	<macrodef name="GOPHERPrepare.dependencies.path">
+		<attribute name="GOPHERPrepare.path.id.name"/>
+		<sequential>
+			<path id="@{GOPHERPrepare.path.id.name}">
+				<fileset dir="${GOPHERPrepare.dist}">
+					<include name="*.jar"/>
+				</fileset>
+			</path>
+		</sequential>
+	</macrodef>
+</project>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Sample answers file -->
+<answers
+	xmlns="http://www.cnio.es/scombio/xcesc/1.0"
+>
+	<answer targetId="ANOTHERUUID">
+		<!-- This targetId correlates to the queryId from query element inside the target element being assessed -->
+		<jobEvaluation targetId="1" timeStamp="2009-10-21T19:34:52.426111465+02:00">
+			<evaluation>
+				<report><!-- It should contain native output report --></report>
+				<placeQuality precision="0.5" recall="0.4">right</placeQuality>
+				<annotationQuality precision="1" recall="0.1">over</annotationQuality>
+				
+				<evaluated>
+					<!-- This is copied from the input -->
+					<match source="HMMer" timeStamp="2009-10-21T19:12:59.453647576+02:00">
+						<scope from="1" to="116"/>
+						<term namespace="GO" kind="F" id="GO:0004866">
+							 <metric type="score">2000</metric>
+							 <metric type="p-value">0.01</metric>
+						</term>
+					</match>
+				</evaluated>
+			</evaluation>
+			<evaluation>
+				<report><!-- It should contain native output report --></report>
+				<placeQuality precision="0.1" recall="0.1">under</placeQuality>
+				<annotationQuality precision="0.8" recall="0.7">right</annotationQuality>
+				
+				<evaluated>
+					<!-- This is copied from the input -->
+					<match source="HMMer" timeStamp="2009-10-21T19:13:20.833425242+02:00">
+						<scope from="131" to="212"/>
+						<term namespace="GO" kind="C" id="GO:0005576">
+							<metric type="score">1000</metric>
+							<metric type="p-value">0.02</metric>
+						</term>
+						<term namespace="GO" kind="F" id="GO:0004421">
+							<metric type="score">500</metric>
+							<metric type="p-value">0.03</metric>
+						</term>
+					</match>
+				</evaluated>
+			</evaluation>
+		</jobEvaluation>
+		<!-- Evaluation for the other jobs will be sent in a different message -->
+	</answer>
+</answers>

@@ -1,0 +1,1401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xcesc="http://www.cnio.es/scombio/xcesc/1.0"
+	xmlns:mgmt="http://www.cnio.es/scombio/xcesc/1.0/xquery/systemManagement"
+	xmlns:job="http://www.cnio.es/scombio/xcesc/1.0/xquery/jobManagement"
+	xmlns:gui="http://www.cnio.es/scombio/xcesc/1.0/xquery/guiManagement"
+	xmlns:meta="http://www.cnio.es/scombio/xcesc/1.0/xquery/metaManagement"
+	xmlns:mailcore="http://www.cnio.es/scombio/xcesc/1.0/xquery/mailCore"
+	targetNamespace="http://www.cnio.es/scombio/xcesc/1.0" elementFormDefault="qualified">
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[XCESC XML Schema, made by José María Fernández González (C) 2008-2011]]></xsd:documentation>
+	</xsd:annotation>
+	
+	<xsd:import namespace="http://www.cnio.es/scombio/xcesc/1.0/xquery/systemManagement" schemaLocation="systemManagement.xsd">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[System management configuration schema]]></xsd:documentation>
+		</xsd:annotation>
+	</xsd:import>
+	
+	<xsd:import namespace="http://www.cnio.es/scombio/xcesc/1.0/xquery/jobManagement" schemaLocation="jobManagement.xsd">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Job management configuration schema]]></xsd:documentation>
+		</xsd:annotation>
+	</xsd:import>
+	
+	<xsd:import namespace="http://www.cnio.es/scombio/xcesc/1.0/xquery/guiManagement" schemaLocation="guiManagement.xsd">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[GUI management configuration schema]]></xsd:documentation>
+		</xsd:annotation>
+	</xsd:import>
+	
+	<xsd:import namespace="http://www.cnio.es/scombio/xcesc/1.0/xquery/metaManagement" schemaLocation="metaManagement.xsd">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[GUI management configuration schema]]></xsd:documentation>
+		</xsd:annotation>
+	</xsd:import>
+	
+	<xsd:import namespace="http://www.cnio.es/scombio/xcesc/1.0/xquery/mailCore" schemaLocation="mailCore.xsd">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Mail core configuration schema]]></xsd:documentation>
+		</xsd:annotation>
+	</xsd:import>
+	
+	<xsd:element name="references">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[This element contains the external references to the server, at documentation level]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element name="reference">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[A reference to external information associated to the server]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:anyURI">
+								<xsd:attribute name="description" type="xsd:string" use="required">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[A brief description about the pointed contents]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="kind" use="required">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[The supposed type of the content]]></xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:string">
+											<xsd:enumeration value="site">
+												<xsd:annotation>
+													<xsd:documentation><![CDATA[Link to the main site]]></xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="link">
+												<xsd:annotation>
+													<xsd:documentation><![CDATA[Link to associated material (e.g. PubMed)]]></xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="logo">
+												<xsd:annotation>
+													<xsd:documentation><![CDATA[Link to a server logo]]></xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="image">
+												<xsd:annotation>
+													<xsd:documentation><![CDATA[Link to images, like screenshots]]></xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:attribute>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="server">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Each one of the servers registered in this XCESC instance]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element name="description" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[A description about the server, maybe in HTML]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="kind" type="xsd:string" minOccurs="1" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Each one of the server kinds this server belongs to]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="otherParams" minOccurs="1" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Other parameters set by the owner of the service, which tweaks the run]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence minOccurs="1" maxOccurs="1">
+							<xsd:element name="param" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[A parameter which tweaks the run. The content of the element is the value]]></xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="xsd:string">
+											<xsd:attribute name="name" type="xsd:string" use="required">
+												<xsd:annotation>
+													<xsd:documentation><![CDATA[The name of the parameter]]></xsd:documentation>
+												</xsd:annotation>
+											</xsd:attribute>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element ref="xcesc:references" minOccurs="1" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[This element contains the external references to the server, at documentation level]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="downTime" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[An scheduled downTime. It can contain a reason about the downTime as its content.]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="id" type="xsd:string" use="required">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[The XCESC ID for a downTime]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="since" type="xsd:dateTime" use="required">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[When this downTime starts (inclusive)]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="until" type="xsd:dateTime" use="optional">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[When this downTime should finish (exclusive). If it is not set, the downTime is *forever*]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="managerId" type="xsd:string" use="required">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[The manager Id who last changed this downtime]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="managerName" type="xsd:string" use="optional">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[The manager name who last changed this downtime]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The XCESC ID for a server]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="name" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The XCESC name for a server]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="managerId" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The ID of the manager of this server]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="uri" type="xsd:anyURI" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The invocation URI]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="type" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The server type]]></xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="participant"/>
+						<xsd:enumeration value="evaluator"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:attributeGroup name="idStatusAttributeGroup">
+		<xsd:attribute name="id" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The unique id of the user in the system]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="status" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The user/e-mail status: enabled, disabled or unconfirmed.
+When an user is disabled, all the servers owned by him/her are disabled.
+When an e-mail is disabled, it is not used to send the user notifications]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="disabled"/>
+					<xsd:enumeration value="enabled"/>
+					<xsd:enumeration value="unconfirmed">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[User/e-mail is almost created, but it is not yet confirmed]]></xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="deleted">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[User/e-mail has been deleted, but it is kept]]></xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<xsd:element name="managementData">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element name="users" minOccurs="1" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[XCESC users are the servers managers]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence minOccurs="1" maxOccurs="1">
+							<xsd:element name="user" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[A XCESC user, with all the contact information]]></xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence minOccurs="1" maxOccurs="1">
+										<xsd:element name="eMail" minOccurs="1" maxOccurs="unbounded">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The e-mail address(es). They must be valid ones]]></xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:simpleContent>
+													<xsd:extension base="xsd:string">
+														<xsd:attributeGroup ref="xcesc:idStatusAttributeGroup"/>
+													</xsd:extension>
+												</xsd:simpleContent>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element ref="xcesc:references" minOccurs="1" maxOccurs="1">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The set of references to external information associated to the user]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="roles" minOccurs="1" maxOccurs="1">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The set of roles associated to the user]]></xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence minOccurs="1" maxOccurs="1">
+													<xsd:element name="role" minOccurs="0" maxOccurs="unbounded">
+														<xsd:complexType>
+															<xsd:attribute name="ref" type="xsd:string" use="required">
+																<xsd:annotation>
+																	<xsd:documentation><![CDATA[The name of the obtained (or denied) role]]></xsd:documentation>
+																</xsd:annotation>
+															</xsd:attribute>
+															<xsd:attribute name="isDenied" type="xsd:boolean" use="optional" default="false">
+																<xsd:annotation>
+																	<xsd:documentation><![CDATA[Has been this role denied to the user?]]></xsd:documentation>
+																</xsd:annotation>
+															</xsd:attribute>
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+									<xsd:attribute name="nickname" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[The unique nickname of the user in the system]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="nickpass" type="xsd:string" use="optional">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[The pasword associated to the user in the system. This attribute is only used in XForms]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attributeGroup ref="xcesc:idStatusAttributeGroup"/>
+									<xsd:attribute name="firstName" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[The first name(s) of the user (e.g. José María)]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="lastName" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[The last name(s) of the user (e.g. Fernández González)]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="organization" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[The organization where the user is integrated]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+					<xsd:key name="users_key">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[There cannot be two users in an XCESC instance with the same id]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:selector xpath="xcesc:user"/>
+						<xsd:field xpath="@id"/>
+					</xsd:key>
+					<xsd:unique name="users_nickname_unique">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[There cannot be two users in an XCESC instance with the same nickname]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:selector xpath="xcesc:user"/>
+						<xsd:field xpath="@nickname"/>
+					</xsd:unique>
+					<xsd:unique name="users_eMail_unique">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[An user cannot have two identical e-mail addresses]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:selector xpath="xcesc:user"/>
+						<xsd:field xpath="xcesc:eMail"/>
+					</xsd:unique>
+				</xsd:element>
+				
+				<xsd:element name="servers" minOccurs="1" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:sequence minOccurs="1" maxOccurs="1">
+							<xsd:element ref="xcesc:server" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+					<xsd:key name="servers_key">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[There cannot be two servers with the same ID]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:selector xpath="xcesc:server"/>
+						<xsd:field xpath="@id"/>
+					</xsd:key>
+					<xsd:unique name="servers_name_unique">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[There cannot be two servers with the same name]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:selector xpath="xcesc:server"/>
+						<xsd:field xpath="@name"/>
+					</xsd:unique>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:keyref refer="xcesc:users_key" name="servers_managerId_keyref_users">
+			<xsd:selector xpath="xcesc:servers/xcesc:server"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+	</xsd:element>
+	
+	<xsd:element name="metric">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[A metric about a piece of information (precision, recall, e-value, z-score, etc...)]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base="xsd:string">
+					<xsd:attribute name="type" use="required">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[The type of metric used]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="score">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[Custom scoring scheme]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="e-value">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[The expected value (or expectation, or mathematical expectation, or mean, or the first moment) of a random variable is the weighted average of all possible values that this random variable can take on.
+See http://en.wikipedia.org/wiki/Expected_value]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="p-value">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[The p-value is the probability of obtaining a test statistic at least as extreme as the one that was actually observed, assuming that the null hypothesis is true.
+See http://en.wikipedia.org/wiki/P-value]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="z-score">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[A standard (Z) score indicates how many standard deviations an observation or datum is above or below the mean.
+See http://en.wikipedia.org/wiki/Standard_score]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="precision">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[Precision is the fraction of retrieved instances that are relevant.
+See http://en.wikipedia.org/wiki/Precision_and_recall]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="recall">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[Recall is the fraction of relevant instances that are retrieved.
+See http://en.wikipedia.org/wiki/Precision_and_recall]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="accuracy">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[The accuracy of a measurement system is the degree of closeness of measurements of a quantity to that quantity's actual (true) value.
+See http://en.wikipedia.org/wiki/Accuracy]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:attributeGroup name="precisionAttributesGroup">
+		<xsd:attribute name="precision" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[Precision is the fraction of retrieved instances that are relevant.
+See http://en.wikipedia.org/wiki/Precision_and_recall]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:double">
+					<xsd:minInclusive value="0.0"/>
+					<xsd:maxInclusive value="1.0"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="recall" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[Recall is the fraction of relevant instances that are retrieved.
+See http://en.wikipedia.org/wiki/Precision_and_recall]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:double">
+					<xsd:minInclusive value="0.0"/>
+					<xsd:maxInclusive value="1.0"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<xsd:attributeGroup name="namespaceAttributesGroup">
+		<xsd:attribute name="namespace" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The namespace of the annotation. For instance, GO]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="kind" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[This optional attribute is useful when under an specific namespace
+there can be more than one kind of public identifiers, so we can distinguish among the different available
+subtypes, categories or ontologies]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="id" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The id of the annotation]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<xsd:attributeGroup name="sharedJobAttributesGroup">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[These attributes are shared by experiment and assessment]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="name" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The name (usually the experiment or assessment job ticket), so we can link to it]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="stamp" type="xsd:dateTime" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The experiment or assessment's timestamp (when it started)]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="baseStamp" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The previous experiment or assessment's timestamp (used to track changes)]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="deadline" type="xsd:dateTime" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The experiment or assessment's deadline (after this one no result is accepted)]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="test" type="xsd:boolean" use="optional" default="false">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[Is it a test experiment/assessment?]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+
+	<xsd:attributeGroup name="sharedEvaExpAttributesGroup">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Shared attribute declarations used by
+				experiment and evaluator]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="ticket" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The unique evaluator ticket]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="startStamp" type="xsd:dateTime" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The timestamp of the evaluation submission]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="lastStamp" type="xsd:dateTime" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The timestamp of the last received in time evaluation result]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="lastMessage" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[Last human-readable message fetched from server on submission, i.e., an error]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+
+	<xsd:element name="term">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[An annotated element with a score]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element ref="xcesc:metric" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="xcesc:namespaceAttributesGroup"/>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="scope">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[The match scope, in its corresponding units.
+As the scope can be sparse, more than one scope element can be specified]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element ref="xcesc:metric" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="xcesc:term" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[This scope can have associated specific annotations]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="label" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[This attribute is useful for structured queries]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="from" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Where the scope begins, relative to the query.
+It depends on the units system and it is always an inclusive limit.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="to" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Where the scope ends, relative to the query.
+It depends on the units system and it is always an inclusive limit.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="units" use="optional" type="xsd:string" default="residues">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The units system, sometimes related to from and to attributes from scope elements, based on the query]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:attributeGroup name="requiredTimeStampGroup">
+		<xsd:attribute name="timeStamp" use="required" type="xsd:dateTime">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The timestamp assigned to the element either in origin or destination]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<xsd:attributeGroup name="optionalTimeStampGroup">
+		<xsd:attribute name="timeStamp" use="optional" type="xsd:dateTime">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The timestamp assigned to the element either in origin or destination]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<xsd:element name="match">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[A match/result found by the server]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="xcesc:scope" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[The match scope, in its corresponding units.
+As the scope can be sparse, more than one scope element can be specified]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:choice>
+					<xsd:element ref="xcesc:term" minOccurs="1" maxOccurs="unbounded"/>
+					<xsd:element name="result" minOccurs="1" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[An structured result]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType mixed="true">
+							<xsd:sequence>
+								<xsd:element name="metrics" minOccurs="1" maxOccurs="1">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[This element is needed by XML Schema 1.0 in order to allow something more]]></xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:sequence minOccurs="1" maxOccurs="1">
+											<xsd:element ref="xcesc:metric" minOccurs="1" maxOccurs="unbounded" />
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:any processContents="lax" namespace="##any" minOccurs="0" maxOccurs="unbounded">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[As it can contain any content, it is mixed]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:any>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:sequence>
+			<xsd:attribute name="source" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The match source is the kind of prediction/assessment done.
+For instance, if a server is hybrid, in the sense it is able to generate predictions/assessments for homology modelling and
+ab initio, then the origin of the match must be identified]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attributeGroup ref="xcesc:optionalTimeStampGroup">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The timestamp assigned to this match once it arrives to the server]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attributeGroup>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:simpleType name="placeQualityEnum">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Simple type created to enumerate the subjective place quality values]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="right">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Right place for the annotation, no more, no less]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="partial">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Predicted place partially overlaps a right one]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="under">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Predicted place is a subset of a right one]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="over">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Predicted place is a superset of a right one]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="wrong">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Predicted place is wrong or completely misplaced]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="missing">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[There was no prediction which matched this place]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NA">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The evaluator is not able to assess places]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="annotationQualityEnum">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Simple type created to enumerate the subjective annotation quality values]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="right">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Right annotation, no more, no less]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="under">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Annotation is too general]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="over">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Annotation is over specific]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="wrong">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Annotation is wrong]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="missing">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[There was no prediction for this annotation, and there should be]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NA">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The evaluator is not able to assess annotations]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:element name="jobEvaluation">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[The evaluation of each one of the jobs done by the partipant being assessed]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element name="evaluation" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Each piece to be assessed from this job]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence minOccurs="1" maxOccurs="1">
+							<xsd:element name="report" minOccurs="0" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[This It should contain any native output report the server wants to provide]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="placeQuality" minOccurs="0" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Assessment about the place of the annotation (the piece to be assessed)]]></xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="xcesc:placeQualityEnum">
+											<xsd:attributeGroup ref="xcesc:precisionAttributesGroup"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="annotationQuality" minOccurs="0" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Assessment about the quality of the annotation (the piece to be assessed)]]></xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="xcesc:annotationQualityEnum">
+											<xsd:attributeGroup ref="xcesc:precisionAttributesGroup"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<!--
+							<xsd:element ref="xcesc:scope" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[The match scope, in its corresponding units.
+As the scope can be sparse, more than one scope element can be specified]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element ref="xcesc:term" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[These terms can help to annotate the assessment using a ontology (it should RDF, I know)]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							-->
+							<xsd:element name="evaluated" minOccurs="1" maxOccurs="1">
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[We can even assess other evaluators]]></xsd:documentation>
+										</xsd:annotation>
+										<xsd:element ref="xcesc:match" minOccurs="0" maxOccurs="1"/>
+										<xsd:element ref="xcesc:jobEvaluation" minOccurs="0" maxOccurs="1"/>
+									</xsd:choice>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="targetId" use="required" type="xsd:positiveInteger">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The id of a job's answer from the participants point of view.
+i.e. The value of the targetId attribute from the query element inside the arriving target element being assessed.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attributeGroup ref="xcesc:optionalTimeStampGroup">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The timestamp of this assessment from the point of view of the evaluator]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attributeGroup>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="answer">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[An answer about a target]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice minOccurs="0">
+					<xsd:element ref="xcesc:target" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="refContent" minOccurs="1" maxOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[This element is used to reference a common bundle of information]]></xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:attribute name="ref" type="xsd:string" use="required">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[This attribute contains the reference]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:complexType>
+						<xsd:keyref refer="xcesc:contentKey" name="contentKeyRef">
+							<xsd:selector xpath="."/>
+							<xsd:field xpath="@ref"/>
+						</xsd:keyref>
+					</xsd:element>
+				</xsd:choice>
+				<xsd:choice>
+					<xsd:element ref="xcesc:match" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element ref="xcesc:jobEvaluation" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:choice>
+			</xsd:sequence>
+			<xsd:attribute name="targetId" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The id of the answer]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="message" type="xsd:string" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[An optional message, about the answer]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="answers">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[The answers bundle sent by the servers. A server can send more than one bundle.]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="xcesc:common" minOccurs="0" maxOccurs="1"/>
+				<xsd:element ref="xcesc:answer" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:attributeGroup name="queryIdGroup">
+		<xsd:attribute name="queryId" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The id of the query (typically, a number)]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<xsd:element name="query">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[The query which is submitted to the servers. It can be either a query to a prediction server, or an assessment request to an evaluation server]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType mixed="true">
+			<xsd:choice>
+				<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax"/>
+				<xsd:element ref="xcesc:answer" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:choice>
+			<xsd:attributeGroup ref="xcesc:queryIdGroup">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The id of the query (typically, a number)]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attributeGroup>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:attributeGroup name="callbackAttributeGroup">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Shared callback attribute]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="callback" type="xsd:anyURI" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The callback address to send the answers to the queries from the server]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<xsd:element name="common">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[An area where common content is shared in bundles]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="content">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[A bundle of shared content]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element ref="xcesc:query"/>
+							<xsd:element ref="xcesc:target"/>
+						</xsd:choice>
+						<xsd:attribute name="id" type="xsd:string" use="required">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[The unique id of this bundle within this XML document]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="queries">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[One or more queries sent to a server]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="xcesc:common" minOccurs="0" maxOccurs="1"/>
+				<xsd:element ref="xcesc:query" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="xcesc:callbackAttributeGroup"/>
+		</xsd:complexType>
+		<xsd:key name="contentKey">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[The shared content must use unique keys within the document]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath="xcesc:content"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		
+	</xsd:element>
+	
+	<xsd:element name="acceptedQueries">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[The set of accepted queries]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element name="accepted">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[An accepted query]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:attributeGroup ref="xcesc:queryIdGroup"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="xcesc:optionalTimeStampGroup">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The timestamp assigned by the server which has accepted these prediction or evaluation queries]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attributeGroup>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="target">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element ref="xcesc:query"/>
+				<xsd:element name="relatedContent" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Related content to the query, given by the XCESC core]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice minOccurs="1" maxOccurs="unbounded">
+							<xsd:element ref="xcesc:term">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Links to related data or members identified by the XCESC core]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<!-- SOMETHING MORE! INLINE RELATED CONTENT, FOR INSTANCE! -->
+							<xsd:element name="inlineContent">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Inline related content]]></xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:attribute name="source" use="required" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[The source of this related content. It should be like a namespace]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="description" use="optional" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[An optional textual description ]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="label" use="optional" type="xsd:string"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="baseline" minOccurs="1" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[A fast, baseline answer for the query]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element ref="xcesc:match" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:sequence>
+						<xsd:attributeGroup ref="xcesc:requiredTimeStampGroup"/>
+					</xsd:complexType>
+				</xsd:element>
+				<!--							<xsd:element name="tag" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+					<xsd:documentation><![CDATA[Generic tags, containing the value as content]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+					<xsd:simpleContent>
+					<xsd:extension base="xsd:string">
+					<xsd:attribute name="name" type="xsd:string" use="required">
+					<xsd:annotation>
+					<xsd:documentation><![CDATA[The key of this tag]]></xsd:documentation>
+					</xsd:annotation>
+					</xsd:attribute>
+					</xsd:extension>
+					</xsd:simpleContent>
+					</xsd:complexType>
+					</xsd:element>
+				-->
+			</xsd:sequence>
+			<xsd:attributeGroup ref="xcesc:namespaceAttributesGroup"/>
+			<xsd:attribute name="description" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[A descriptive line for the query (for instance, from PDB or PDBPre)]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+<!--	<xsd:element name="toEvaluate">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[One or more queries sent to an evaluator]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="xcesc:target" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="xcesc:callbackAttributeGroup"/>
+		</xsd:complexType>
+	</xsd:element>
+-->
+	<xsd:element name="experiment">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element ref="xcesc:target" minOccurs="1" maxOccurs="unbounded"/>
+				<xsd:element name="participant" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence minOccurs="1" maxOccurs="1">
+							<xsd:element ref="xcesc:server" minOccurs="1" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Server information is preserved here, so changes do not affect the calling values]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:choice>
+								<xsd:element name="job" minOccurs="0" maxOccurs="unbounded">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[A job is a target sent to the server]]></xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element ref="xcesc:match" minOccurs="0" maxOccurs="unbounded">
+												<xsd:annotation>
+													<xsd:documentation><![CDATA[A result from the job. It can contain from 0 to an undetermined number of matches.]]></xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+										</xsd:sequence>
+										<xsd:attribute name="targetId" type="xsd:positiveInteger" use="required">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The Id of the target sent in this job]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+										<xsd:attribute name="stopStamp" type="xsd:dateTime" use="optional">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The timestamp when a job from this XCESC instance has finished (either properly or with failure)]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+										<xsd:attribute name="status" use="required">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The status of the job at lastQueryStamp]]></xsd:documentation>
+											</xsd:annotation>
+											<xsd:simpleType>
+												<xsd:restriction base="xsd:string">
+													<xsd:enumeration value="queued">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job has not been sent yet]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="submitted">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job has been properly submitted, but no polling has been done yet]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="running">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job is still running]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<!--
+													<xsd:enumeration value="killed">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job has been killed from the XCESC instance side]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													-->
+													<xsd:enumeration value="transienterror">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[A transient error happened (network is down, for instance)]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="error">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[There was an error on the server's side]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="finished">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job finished and the results could be fetched]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+												</xsd:restriction>
+											</xsd:simpleType>
+										</xsd:attribute>
+										<xsd:attribute name="lastMessage" type="xsd:string" use="optional">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[Last human-readable message fetched from server or generated by this XCESC instance, usually an error]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="errorMessage">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[Last human-readable message fetched from server on submission, i.e., an error]]></xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType mixed="true">
+										<xsd:sequence>
+											<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##any" processContents="lax"/>
+										</xsd:sequence>
+										<xsd:attribute name="statusCode" type="xsd:positiveInteger" use="required">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The HTTP status error code]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:choice>
+						</xsd:sequence>
+						<xsd:attributeGroup ref="xcesc:sharedEvaExpAttributesGroup"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="xcesc:sharedJobAttributesGroup"/>
+			<xsd:attribute name="isAssessed" type="xsd:boolean" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Has the experiment being officially assessed at least once?]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+		<xsd:key name="target_key">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[There cannot be two targets with the same id in the same experiment]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath="xcesc:target"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref refer="xcesc:target_key" name="job_targetid_referes_target">
+			<xsd:selector xpath="xcesc:participant/xcesc:job"/>
+			<xsd:field xpath="@targetId"/>
+		</xsd:keyref>
+		<xsd:unique name="participant_server_unique">
+			<xsd:selector xpath="xcesc:participant/xcesc:server"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+	</xsd:element>
+	
+	<xsd:element name="experiments">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element ref="xcesc:experiment" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:key name="experiments_stamp">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[There cannot be two experiments with the same timestamp]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath="xcesc:experiment"/>
+			<xsd:field xpath="@stamp"/>
+		</xsd:key>
+		<xsd:keyref refer="xcesc:experiments_stamp" name="experiments_baseStamp_stamp">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[baseStamp points to a previous experiment]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath="xcesc:experiment"/>
+			<xsd:field xpath="@baseStamp"/>
+		</xsd:keyref>
+	</xsd:element>
+	
+	<xsd:element name="lastRound">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[Last round document, needed to know where PDB and PDBPre filtered database files are lying]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attributeGroup ref="xcesc:requiredTimeStampGroup">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[The last update stamp, empty on server init!]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attributeGroup>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<!-- TODO: Experiment and assessment need some schema sharing reorganization -->
+	<xsd:element name="assessment">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[An assessment is the evaluation of the accuracy, recall, etc... for all the experiment participants]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element name="evaluator" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence minOccurs="1" maxOccurs="1">
+							<xsd:element ref="xcesc:server" minOccurs="1" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Server information is preserved here, so changes do not affect the calling values]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:choice>
+								<xsd:element name="job" minOccurs="0" maxOccurs="unbounded">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[A job is a evaluation target sent to the server]]></xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element ref="xcesc:jobEvaluation" minOccurs="0" maxOccurs="unbounded">
+												<xsd:annotation>
+													<xsd:documentation><![CDATA[The evaluation of each one of the jobs done by the partipant being assessed]]></xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+										</xsd:sequence>
+										<xsd:attribute name="participantTicket" type="xsd:string" use="required">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The ticket of the participant being assessed in this job]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+										<xsd:attribute name="stopStamp" type="xsd:dateTime" use="optional">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The timestamp when a job from this XCESC instance has finished (either properly or with failure)]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+										<xsd:attribute name="status" use="required">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The status of the job at lastQueryStamp]]></xsd:documentation>
+											</xsd:annotation>
+											<xsd:simpleType>
+												<xsd:restriction base="xsd:string">
+													<xsd:enumeration value="queued">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job has not been sent yet]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="submitted">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job has been properly submitted, but no polling has been done yet]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="running">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job is still running]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<!--
+														<xsd:enumeration value="killed">
+														<xsd:annotation>
+														<xsd:documentation><![CDATA[The job has been killed from the XCESC instance side]]></xsd:documentation>
+														</xsd:annotation>
+														</xsd:enumeration>
+													-->
+													<xsd:enumeration value="transienterror">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[A transient error happened (network is down, for instance)]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="error">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[There was an error on the server's side]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+													<xsd:enumeration value="finished">
+														<xsd:annotation>
+															<xsd:documentation><![CDATA[The job finished and the results could be fetched]]></xsd:documentation>
+														</xsd:annotation>
+													</xsd:enumeration>
+												</xsd:restriction>
+											</xsd:simpleType>
+										</xsd:attribute>
+										<xsd:attribute name="lastMessage" type="xsd:string" use="optional">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[Last human-readable message fetched from server or generated by this XCESC instance, usually an error]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="errorMessage">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[Last human-readable message fetched from server on submission, i.e., an error]]></xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType mixed="true">
+										<xsd:sequence>
+											<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##any" processContents="lax"/>
+										</xsd:sequence>
+										<xsd:attribute name="statusCode" type="xsd:positiveInteger" use="required">
+											<xsd:annotation>
+												<xsd:documentation><![CDATA[The HTTP status error code]]></xsd:documentation>
+											</xsd:annotation>
+										</xsd:attribute>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:choice>
+						</xsd:sequence>
+						<xsd:attributeGroup ref="xcesc:sharedEvaExpAttributesGroup"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="xcesc:sharedJobAttributesGroup"/>
+		</xsd:complexType>
+		<xsd:key name="assessment_target_key">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[There cannot be two targets with the same id in the same assessment]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath="xcesc:target"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref refer="xcesc:assessment_target_key" name="job_targetid_referes_assessment_target">
+			<xsd:selector xpath="xcesc:participant/xcesc:job"/>
+			<xsd:field xpath="@targetId"/>
+		</xsd:keyref>
+		<xsd:unique name="assessor_server_unique">
+			<xsd:selector xpath="xcesc:assessor/xcesc:server"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+	</xsd:element>
+	
+	<xsd:element name="configuration">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[The configuration of a XCESC system, probably stored at /db/XCESC-config/configuration.xml]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mgmt:systemManagement"/>
+				<xsd:element ref="job:jobManagement"/>
+				<xsd:element ref="gui:guiManagement"/>
+				<xsd:element ref="meta:metaManagement"/>
+				<xsd:element ref="mailcore:mailCore"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

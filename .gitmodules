@@ -1,0 +1,8 @@
+[submodule "skel/www/forms/xsltforms"]
+	path = skel/www/forms/xsltforms
+	url = https://github.com/eXist-db/xsltforms-xar.git
+	branch = master
+[submodule "external/ORFandDB-X"]
+	path = external/ORFandDB-X
+	url = https://github.com/inab/ORFandDB-X.git
+	branch = master

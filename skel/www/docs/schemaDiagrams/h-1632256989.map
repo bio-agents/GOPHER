@@ -1,0 +1,32 @@
+<map xmlns='http://www.w3.org/1999/xhtml' name='h-1632256989'>
+ <area
+  shape='rect'
+  alt='h-1109675339'
+  coords='305,0,508,25'
+  href='systemManagement.xsd.html#h-1109675339'/>
+
+ <area
+  shape='rect'
+  alt='h-222482467'
+  coords='305,35,480,60'
+  href='jobManagement.xsd.html#h-222482467'/>
+
+ <area
+  shape='rect'
+  alt='h1738465243'
+  coords='305,70,480,95'
+  href='guiManagement.xsd.html#h1738465243'/>
+
+ <area
+  shape='rect'
+  alt='h1418682315'
+  coords='305,105,494,130'
+  href='metaManagement.xsd.html#h1418682315'/>
+
+ <area
+  shape='rect'
+  alt='h1254794201'
+  coords='305,140,480,165'
+  href='mailCore.xsd.html#h1254794201'/>
+
+</map>

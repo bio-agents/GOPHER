@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="download-xdb" name="xdb-bootstrap" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<local name="included.basedir"/>
+	<dirname property="included.basedir" file="${ant.file.xdb-bootstrap}" />
+	<include file="${included.basedir}/ivy-bootstrap.xml"/>
+	
+	<property name="xdb.install.version" value="3.0.RC1"/>
+	<property name="xdb.jar.dir" location="${gopher.ant-libs.basedir}/xdb"/>
+	
+	<macrodef name="xdb-resolve">
+		<attribute name="ivy-settings-file" default="${included.basedir}/xdb-ivysettings.xml"/>
+		<attribute name="eXist.version" default="${xdb.install.version}"/>
+		<sequential>
+			<ivy:configure file="@{ivy-settings-file}"/>
+			<ivy:resolve>
+				<ivy:dependency org="org.exist-db" name="exist-optional" rev="@{eXist.version}" conf="*->*,!sources,!javadoc"/>
+			</ivy:resolve>
+		</sequential>
+	</macrodef>
+	
+	<target name="init" depends="ivy-bootstrap.bootstrap-ivy" />
+
+	<!-- xdb bootstrapping based on Ivy -->
+	<target name="download-xdb" depends="init" unless="skip.xdb.download">
+		<xdb-resolve />
+		<ivy:retrieve pattern="${xdb.jar.dir}/[artifact]-[revision].[ext]"/>
+		
+		<!-- We do this task only once -->
+		<property name="skip.xdb.download" value="true"/>
+	</target>
+	
+	<target name="bootstrap-xdb" depends="download-xdb" description="--> install eXistDB tasks" unless="already.bootstrap-xdb">
+		<path id="xdb.lib.path">
+			<fileset dir="${xdb.jar.dir}" includes="*.jar"/>
+		</path>
+		<taskdef
+			resource="org/exist/ant/antlib.xml"
+			uri="http://exist-db.org/ant"
+			classpathref="xdb.lib.path"
+		/>
+		<!-- We do this only once -->
+		<property name="already.bootstrap-xdb" value="true"/>
+	</target>
+	
+	<!--
+	<target name="eXist-dependencies-path" depends="ivy-bootstrap.bootstrap-ivy">
+		<xdb-resolve />
+		<ivy:cachepath pathid="${eXist.path.id}" conf="default"/>
+	</target>
+	-->
+	
+	<macrodef name="eXist.dependencies.path">
+		<attribute name="eXist.path.id.name"/>
+		<sequential>
+			<xdb-resolve />
+			<ivy:cachepath pathid="@{eXist.path.id.name}" conf="default"/>
+		</sequential>
+	</macrodef>
+	
+</project>

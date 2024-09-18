@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Sample answers file -->
+<answers
+	xmlns="http://www.cnio.es/scombio/xcesc/1.0"
+>
+	<answer targetId="1">
+		<!-- source attribute is used to tell something about the method class -->
+		<match source="HMMer" timeStamp="2009-10-21T19:12:59.453647576+02:00">
+			<scope from="1" to="116"/>
+			<term namespace="GO" kind="F" id="GO:0004866">
+				 <metric type="score">2000</metric>
+				 <metric type="p-value">0.01</metric>
+			</term>
+		</match>
+		<match source="HMMer" timeStamp="2009-10-21T19:13:20.833425242+02:00">
+			<scope from="131" to="212"/>
+			<term namespace="GO" kind="C" id="GO:0005576">
+				<metric type="score">1000</metric>
+				<metric type="p-value">0.02</metric>
+			</term>
+			<term namespace="GO" kind="F" id="GO:0004421">
+				<metric type="score">500</metric>
+				<metric type="p-value">0.03</metric>
+			</term>
+		</match>
+	</answer>
+	<!-- This one did not get matches, so it is empty -->
+	<answer targetId="2"></answer>
+	
+	<answer targetId="3">
+		<match source="Pfam" timeStamp="2009-10-21T19:13:44.977189325+02:00">
+			<!-- This one maps more than one segment -->
+			<scope from="10" to="40"/>
+			<scope from="60" to="80"/>
+			<term namespace="GO" kind="C" id="GO:0005615">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+		</match>
+	</answer>
+	<answer targetId="4">
+		<match source="Blast" timeStamp="2009-10-21T19:14:00.413601006+02:00">
+			<!-- This one is mapped to the whole sequence -->
+			<term namespace="GO" kind="C" id="GO:0005737">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+			<term namespace="GO" kind="C" id="GO:0005634">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+			<term namespace="GO" kind="F" id="GO:0004422">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+			<term namespace="GO" kind="F" id="GO:0000287">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+			<term namespace="GO" kind="F" id="GO:0005515">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+			<term namespace="GO" kind="P" id="GO:0032263">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+			<term namespace="GO" kind="P" id="GO:0032264">
+				<metric type="score">2000</metric>
+				<metric type="p-value">0.01</metric>
+			</term>
+		</match>
+	</answer>
+</answers>

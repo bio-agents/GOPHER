@@ -1,0 +1,79 @@
+<!--
+  ++ Base configuration for eXist's URL rewriting. This file defines
+  ++ all basic path mappings. A path can be mapped to a servlet or
+  ++ the root of a directory or collection hierarchy.
+  ++
+  ++ This configuration is limited
+  ++ to the XML-RPC, REST, Atom and WebDAV servlets, plus XQueryURLRewrite for the URL
+  ++ handling. Use this configuration if you need a minimum setup with web content
+  ++ stored in the db.
+-->
+<configuration xmlns="http://exist.sourceforge.net/NS/exist">
+	<!-- Webstart servlet
+	<forward pattern="/webstart" servlet="jnlp"/>
+	-->
+	
+	<!-- XMLRPC servlet -->
+	<forward pattern="/xmlrpc" servlet="org.exist.xmlrpc.RpcServlet"/>
+	
+	<!-- REST interface -->
+	<forward pattern="/(rest|servlet)/" servlet="EXistServlet"/>
+	
+	<!-- WebDAV interface -->
+	<forward pattern="/webdav/" servlet="milton"/>
+	<!-- Old WebDAV interface
+	<forward pattern="/webdav/" servlet="WebDAVServlet"/>
+	-->
+	
+	<!-- Atom Publishing Protocol -->
+	<forward pattern="/atom/" servlet="AtomServlet"/>
+	
+	<!-- AtomicWiki thumbnails -->
+	<forward pattern="/thumbs/" servlet="org.atomicwiki.servlets.GetThumbnail"/>
+	<!--
+	<forward pattern="/@AtomicVirtual@" servlet="org.exist.http.urlrewrite.XQueryURLRewrite"/>
+	-->
+	
+	<!-- betterFORM servlets -->
+	<forward pattern="/Flux/" servlet="Flux"/>
+	<forward pattern="/XFormsPost/" servlet="XFormsPostServlet"/>
+	<forward pattern="/forms/formslist" servlet="FormsServlet"/>
+	<forward pattern="/inspector/" servlet="inspector"/>
+	<forward pattern="/bfResources/" servlet="ResourceServlet"/>
+
+	<!-- The JMX status servlet used to monitor the db -->
+	<forward pattern="/status" servlet="JMXServlet"/>
+	
+	<!--
+		++ Default configuration: main web application is served from the
+		++ webapp directory.
+	-->
+	<root pattern="/library" path="xmldb:exist:///db/org/library"/>
+	
+	<root pattern="/apps" path="xmldb:exist:///db"/>
+	
+	<!-- 
+		++ Main web application is served from the
+		++ database. URLs starting with /db are handled
+		++ by the REST servlet.
+	-->
+	<!--
+		It can be a risk showing all the information.
+		So, the main idea is giving just access to public data.
+		For instance, GOPHER-data.
+	-->
+	<!--
+	<root pattern="/db.*" path="xmldb:exist:///db"/>
+	-->
+	
+	<root pattern="/betterform" path="/betterform"/>
+	<root pattern="/@AtomicVirtual@" path="xmldb:exist:///db/@AtomicVirtual@"/>
+	<root pattern="^/@PublicLogic@/.*" path="xmldb:exist:///db/XCESC-logic"/>
+	
+	<!-- Not sure if it will work -->
+	
+	<root pattern="^/$" path="xmldb:exist:///db/www/index.html"/>
+	<root pattern=".*" path="xmldb:exist:///db/www"/>
+	
+	<forward pattern=".*\.(xq|xql|xqy|xquery)$" servlet="XQueryServlet"/>
+</configuration>
